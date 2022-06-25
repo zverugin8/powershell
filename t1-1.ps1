@@ -27,9 +27,21 @@ function comp_ip
         
         process 
         {
-        write-host $IP_Address_1
-        write-host $IP_Address_2
-        write-host $network_mask
+            [int32]$net1=@()
+            [int32]$net2=@()
+
+
+            write-host $IP_Address_1
+            write-host $IP_Address_2
+            write-host $network_mask
+            for ($i = 0; $i -lt 3; $i++) 
+            {
+                $net3 = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )
+                $net2[$i] = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )      
+             }
+             write-host "net1 :  $net1"
+             write-host "net2 :  $net2"
+
         }#process
         
         end 
