@@ -27,8 +27,9 @@ function comp_ip
         
         process 
         {
-            [int32]$net1=@()
-            [int32]$net2=@()
+            #$mask1=@()
+            $net1=@(0,0,0,0,0)
+            $net2=@(0,0,0,0,0)
 
 
             write-host $IP_Address_1
@@ -36,11 +37,11 @@ function comp_ip
             write-host $network_mask
             for ($i = 0; $i -lt 3; $i++) 
             {
-                $net3 = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )
-                $net2[$i] = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )      
+             $net1[$i] = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )
+             $net2[$i] =   $( $IP_Address_2.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )      
              }
-             write-host "net1 :  $net1"
-             write-host "net2 :  $net2"
+             write-host "net1 :  "$net1[0..3]
+             write-host "net2 :  "$net2[0..3]
 
         }#process
         
