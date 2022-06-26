@@ -8,12 +8,9 @@
     )
     
 
-#$mask1=@()
 $mask1=@(0,0,0,0,0)
-#[math]::Pow(2,8)
 $rest=0
 $raz=([math]::DivRem($cidr,8,[ref]$rest))
-#$rest
 
 for ($i=0 ; $i -lt $raz ; $i++ )
 {
