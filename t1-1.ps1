@@ -32,16 +32,19 @@ function comp_ip
             $net2=@(0,0,0,0,0)
 
 
-            write-host $IP_Address_1
-            write-host $IP_Address_2
-            write-host $network_mask
-            for ($i = 0; $i -lt 3; $i++) 
+            Write-Verbose $IP_Address_1
+            Write-Verbose $IP_Address_2
+            Write-Verbose $network_mask
+            for ($i = 0; $i -le 3; $i++) 
             {
              $net1[$i] = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )
              $net2[$i] =   $( $IP_Address_2.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )      
              }
-             write-host "net1 :  "$net1[0..3]
-             write-host "net2 :  "$net2[0..3]
+             Write-Verbose "net1 :  $($net1[0..3])"
+             Write-Verbose "net2 :  $($net2[0..3])"
+             $ress=( Compare-Object -ReferenceObject $net1[0..3] -DifferenceObject $net2[0..3] )
+             if ( $ress.Length -eq 0 ) {Write-Output "YES"}
+             else {Write-Output "NO"}
 
         }#process
         

@@ -3,20 +3,21 @@ function test-mask {
     param (
     [parameter(Mandatory=$true,
     Position=0)]
-    [IPAddress]$ip8 # input mask value
+    [IPAddress]$ip9 # input mask value
     )
     #[IPAddress]$ip8="128.192.0.0"
-    $const_ar=@(128,192,224,240,248,252,254) #mask possible values
-    [boolean]$res=$False 
-    $next=0
-
-    foreach ($a in $ip8.GetAddressBytes() )
-    {
+    $res="" 
     
-    if ( $a -eq 255 )                            { $res=$true } # is digit 255? - then ok
+    
+    if ( ($a -gt 0) -and ($a -le 32) 
+       -and    
+       )                            
+    
+    
+    
+    { $res=$true } # is digit 255? - then ok
     elseif ( $($const_ar | where {$_ -eq $a}) -and ($next -eq 0) )  { $res=$true; $next=1 } # is digit in arr? - yes, but next digit must be zero
     elseif ( $a -ne 0 )                          { $res=$False; $next=1} # is digit not zero? = incorrect mask 
     Write-Verbose "a is $a; res is $res ; next is $next"
     }
     return $res
-}   
