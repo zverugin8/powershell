@@ -6,10 +6,10 @@ function test-mask_cidr
     Position=0)]
     [IPAddress]$ip9 # input mask value
     )
-    $ip9.GetAddressBytes()[0]
-    $ip9.GetAddressBytes()[1]
-    $ip9.GetAddressBytes()[2]
-    $ip9.GetAddressBytes()[3]
+    #$ip9.GetAddressBytes()[0]
+    #$ip9.GetAddressBytes()[1]
+    #$ip9.GetAddressBytes()[2]
+    #$ip9.GetAddressBytes()[3]
     $res=""
     $ress1=$ip9.GetAddressBytes()[3]
     $ress2=( Compare-Object -ReferenceObject $ip9.GetAddressBytes()[0..2] -DifferenceObject @(0,0,0) )

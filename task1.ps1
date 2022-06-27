@@ -27,10 +27,10 @@ function test-mask_cidr
     Position=0)]
     [IPAddress]$ip9 # input mask value
     )
-    $ip9.GetAddressBytes()[0]
-    $ip9.GetAddressBytes()[1]
-    $ip9.GetAddressBytes()[2]
-    $ip9.GetAddressBytes()[3]
+    #$ip9.GetAddressBytes()[0]
+    #$ip9.GetAddressBytes()[1]
+    #$ip9.GetAddressBytes()[2]
+    #$ip9.GetAddressBytes()[3]
     $res=""
     $ress1=$ip9.GetAddressBytes()[3]
     $ress2=( Compare-Object -ReferenceObject $ip9.GetAddressBytes()[0..2] -DifferenceObject @(0,0,0) )
@@ -93,7 +93,9 @@ for ($j=0; $j -lt $rest ; $j++ )
 $mask1[$i]+=([math]::Pow(2,(7-$j)))
 #$mask1[$i]
 }
-return $mask1[0..3]
+[string]$mask2="$($mask1[0])" + "." + "$($mask1[1])" + "." + "$($mask1[2])" + "." + "$($mask1[3])"
+#
+return $mask2
 
 }
 
@@ -139,11 +141,11 @@ function comp_ip
              $net1[$i] = $( $IP_Address_1.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )
              $net2[$i] =   $( $IP_Address_2.GetAddressBytes()[$i] -band $network_mask.GetAddressBytes()[$i] )      
              }
-             Write-Verbose "net1 :  $($net1[0..3])"
-             Write-Verbose "net2 :  $($net2[0..3])"
+             Write-Output "net1 :  $($net1[0..3])"
+             Write-Output "net2 :  $($net2[0..3])"
              $ress=( Compare-Object -ReferenceObject $net1[0..3] -DifferenceObject $net2[0..3] )
-             if ( $ress.Length -eq 0 ) {Write-Output "YES"}
-             else {Write-Output "NO"}
+             if ( $ress.Length -eq 0 ) {Write-Output "Same subnet?-YES"}
+             else {Write-Output "Same subnet?-NO"}
 
         }#process
         
@@ -156,15 +158,27 @@ function comp_ip
 function IsValidIPv4Address ($ip) {
     return ($ip -match "^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$" -and [bool]($ip -as [ipaddress])) #GodBless stackoverflow
 }
+
 $a1=IsValidIPv4Address ($IP_Address_1)
 $a2=IsValidIPv4Address ($IP_Address_2)
+$mask_type=test-mask_cidr($network_mask)
+echo "mask_type:$mask_type"
+if ( $mask_type -eq "cidr")  { [string]$network_mask=Convert-cidr($network_mask) ; echo "newmask:$network_mask"     
+}
 $m1=IsValidIPv4Address ($network_mask)
-$mask_cont=test-mask($network_mask)
-
-echo "a1:$a1"
-echo "a2:$a2"
-echo "m1:$m1"
+if ($m1) { $mask_cont=test-mask_cont($network_mask) }
+echo "a1:$a1, $IP_Address_1 "
+echo "a2:$a2, $IP_Address_2"
+echo "m1:$m1, $network_mask"
 echo "mask_cont:$mask_cont"
+echo "mask_type:$mask_type"
+#if ($m1 -and $mask_cont) {echo "mask incorrect"}
 
 
+if (  -not ($a1 -and $a2 -and $m1 -and $mask_cont) ) 
+{echo "Param incorrect"}
+else {$all_param=$true}
+
+if ($all_param) {
 comp_ip -IP_Address_1 $IP_Address_1 -IP_Address_2 $IP_Address_2 -network_mask $network_mask
+}
