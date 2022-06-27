@@ -67,7 +67,7 @@ function test-mask_cont {       #mask MUST be continuous, 111000 - valid, 111001
     return $res
 }
       
-function Convert-cidr {
+function Convert-cidr {         #convert CIDR to mask
     [cmdletbinding()]
     param 
     (
@@ -96,7 +96,7 @@ return $mask2
 
 }
 
-function comp_ip 
+function comp_ip                # get 2 net from both IP's and compare net_ip1 - net_ip2
 {
     [cmdletbinding()]
     Param
@@ -158,7 +158,8 @@ function IsValidIPv4Address ($ip) {
 
 $a1=IsValidIPv4Address ($IP_Address_1)
 $a2=IsValidIPv4Address ($IP_Address_2)
-$mask_type=test-mask_cidr($network_mask) #mask or CIDR? 
+if ( (IsValidIPv4Address($network_mask)) -or (($network_mask -gt 0) -and ($network_mask -le 32)) )
+{$mask_type=test-mask_cidr($network_mask)} #mask or CIDR? 
 echo "mask_type:$mask_type"
 if ( $mask_type -eq "cidr")  { [string]$network_mask=Convert-cidr($network_mask) ; echo "CIDR_to_mask:$network_mask" #get converted mask
 }
