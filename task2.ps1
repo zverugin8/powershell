@@ -32,9 +32,9 @@ function changeData {
     return $c_people
     }
 
-    $arr1=$arr.PSObject.Copy()
+    $arr1=$arr.PSObject.Copy() # create copy for debug purposes
 
-    for ($i = 0; $i -lt $arr.Count; $i++) {
+    for ($i = 0; $i -lt $arr.Count; $i++) {    #update array copy 
         $arr1[$i]=changedata($arr[$i])
     }
     
