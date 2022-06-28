@@ -1,0 +1,1 @@
+$arr1=$(Import-Csv -Path .\accounts_new.csv)
